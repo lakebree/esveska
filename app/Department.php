@@ -13,5 +13,11 @@ class Department extends Model
 
 	}
 
+	public function classos() {
+
+		return $this->hasMany('App\Classo');
+
+	}
+
 
 }

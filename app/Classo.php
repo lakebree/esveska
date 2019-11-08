@@ -4,10 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Class extends Model
+class Classo extends Model
 {
-    
-	public function school(){
+    public function school(){
 
 		return $this->belongsTo('App\School');
 
@@ -22,6 +21,12 @@ class Class extends Model
 	public function year(){
 
 		return $this->belongsTo('App\Year');
+
+	}
+
+	public function department(){
+
+		return $this->belongsTo('App\Department');
 
 	}
 

@@ -22,7 +22,7 @@ class CreateStudentsTable extends Migration
             $table->string('phone')->unique();
             $table->string('password');
             $table->integer('is_active')->default(0); //0 = inactive, 1 = active
-            $table->integer('class_id')->unsigned();
+            $table->integer('classo_id')->unsigned();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -13,9 +13,9 @@ class School extends Model
 
 	}
 
-	public function classes(){
+	public function classos(){
 
-		return $this->hasMany('App\Class');
+		return $this->hasMany('App\Classo');
 
 	}
 

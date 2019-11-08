@@ -15,12 +15,23 @@ use App\Year;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'HomeController@index')->name('');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
 
 
+Auth::routes(['register' => false]);
+
+Route::get('/test', function(){
+
+	$hashed = Hash::make('LFM4JDFB', [
+	    'memory' => 1024,
+	    'time' => 2,
+	    'threads' => 2,
+	]);
+
+echo $hashed;
+
+
+});

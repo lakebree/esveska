@@ -1,80 +1,317 @@
-<!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="app-fluid">
+
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
+    <meta charset="utf-8" />
     <title>{{ config('app.name') }}</title>
-
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
-
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-
-    <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <meta name="description" content="eSveska" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <link href="{{ asset('css/font.css') }}" rel="stylesheet">
+    <link href="{{ asset('js/datatables/datatables.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/app.v1.css') }}" rel="stylesheet">
+    <!--[if lt IE 9]> <script src="js/ie/html5shiv.js"></script> <script src="{{ asset('js/ie/respond.min.js') }}" defer></script> <script src="{{ asset('js/ie/excanvas.js') }}" defer></script> <![endif]-->
 </head>
-<body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
-
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                            </li>
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
+<body class="">
+    <section class="vbox">
+        <header class="bg-black navbar-fixed-top header navbar navbar-fixed-top-xs">
+            <div class="navbar-header aside-md">
+                <a class="btn btn-link visible-xs" data-toggle="class:nav-off-screen,open" data-target="#nav,html"> <i class="fa fa-bars"></i> </a>
+                <a href="#" class="navbar-brand" data-toggle="fullscreen"><img src="{{ URL::to('/') }}/img/logo.png" class="m-r-sm">{{ config('app.name')}}</a>
+                <a class="btn btn-link visible-xs" data-toggle="dropdown" data-target=".nav-user"> <i class="fa fa-cog"></i> </a>
+            </div>
+            <ul class="nav navbar-nav hidden-xs">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle dker" data-toggle="dropdown"> <i class="fa fa-building-o"></i> <span class="font-bold">Activity</span> </a>
+                    <section class="dropdown-menu aside-xl on animated fadeInLeft no-borders lt">
+                        <div class="wrapper lter m-t-n-xs">
+                            <a href="#" class="thumb pull-left m-r"> <img src="images/avatar.jpg" class="img-circle"> </a>
+                            <div class="clear"> <a href="#"><span class="text-white font-bold">{{ $user->first_name }} {{ $user->last_name }}</a></span> <small class="block">{{ Auth::user()->username }}</small> <a href="#" class="btn btn-xs btn-success m-t-xs">Upgrade</a> </div>
+                        </div>
+                        <div class="row m-l-none m-r-none m-b-n-xs text-center">
+                            <div class="col-xs-4">
+                                <div class="padder-v"> <span class="m-b-xs h4 block text-white">@switch($user->classo->year_id)
+                                    @case(1)
+                                        I
+                                        @break
+                                    @case(2)
+                                        II
+                                        @break
+                                    @case(3)
+                                        III
+                                        @break
+                                    @case(4)
+                                        IV
+                                        @break
+                                @endswitch
+                                <sub>{{$user->classo->classo_number}}</sub>
+                                </span> <small class="text-muted">Odeljenje</small> </div>
+                            </div>
+                            <div class="col-xs-4 dk">
+                                <div class="padder-v"> <span class="m-b-xs h4 block text-white">{{ $department->name }}</span> <small class="text-muted">Smer</small> </div>
+                            </div>
+                            <div class="col-xs-4">
+                                <div class="padder-v"> <span class="m-b-xs h4 block text-white">2,035</span> <small class="text-muted">Photos</small> </div>
+                            </div>
+                        </div>
+                    </section>
+                </li>
+                
+            </ul>
+            <ul class="nav navbar-nav navbar-right m-n hidden-xs nav-user">
+                <li class="hidden-xs">
+                    <a href="#" class="dropdown-toggle dk" data-toggle="dropdown"> <i class="fa fa-bell"></i> <span class="badge badge-sm up bg-danger m-l-n-sm count">2</span> </a>
+                    <section class="dropdown-menu aside-xl">
+                        <section class="panel bg-white">
+                            <header class="panel-heading b-light bg-light"> <strong>You have <span class="count">2</span> notifications</strong> </header>
+                            <div class="list-group list-group-alt animated fadeInRight">
+                                <a href="#" class="media list-group-item"> <span class="pull-left thumb-sm"> <img src="images/avatar.jpg" alt="John said" class="img-circle"> </span> <span class="media-body block m-b-none"> Use awesome animate.css<br> <small class="text-muted">10 minutes ago</small> </span> </a>
+                                <a href="#" class="media list-group-item"> <span class="media-body block m-b-none"> 1.0 initial released<br> <small class="text-muted">1 hour ago</small> </span> </a>
+                            </div>
+                            <footer class="panel-footer text-sm"> <a href="#" class="pull-right"><i class="fa fa-cog"></i></a> <a href="#notes" data-toggle="class:show animated fadeInRight">See all the notifications</a> </footer>
+                        </section>
+                    </section>
+                </li>
+                
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span class="thumb-sm avatar pull-left"> <img src="images/avatar.jpg"> </span> John.Smith <b class="caret"></b> </a>
+                    <ul class="dropdown-menu animated fadeInRight"> <span class="arrow top"></span>
+                        <li> <a href="#">Settings</a> </li>
+                        <li> <a href="profile.html">Profile</a> </li>
+                        <li>
+                            <a href="#"> <span class="badge bg-danger pull-right">3</span> Notifications </a>
+                        </li>
+                        <li> <a href="docs.html">Help</a> </li>
+                        <li class="divider"></li>
+                        <li> <a href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        {{ __('Odjavi se') }}
+                                    </a><form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
+                                    </form> </li>
                     </ul>
-                </div>
-            </div>
-        </nav>
-
-        <main class="py-4">
-            @yield('content')
-        </main>
-    </div>
+                </li>
+            </ul>
+        </header>
+        <section>
+            <section class="hbox stretch">
+                <!-- .aside -->
+                <aside class="bg-black aside-md hidden-print hidden-xs" id="nav">
+                    <section class="vbox">
+                        <header class="header bg-primary lter text-center clearfix">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-dark btn-icon" title="New project"><i class="fa fa-plus"></i></button>
+                                <div class="btn-group hidden-nav-xs">
+                                    <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown"> Switch Project <span class="caret"></span> </button>
+                                    <ul class="dropdown-menu text-left">
+                                        <li><a href="#">Project</a></li>
+                                        <li><a href="#">Another Project</a></li>
+                                        <li><a href="#">More Projects</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </header>
+                        <section class="w-f scrollable">
+                            <div class=" " data-height="auto" data-disable-fade-out="true" data-distance="0" data-size="5px" data-color="#333333">
+                                <!-- nav -->
+                                <nav class="nav-primary hidden-xs">
+                                    <ul class="nav">
+                                        <li>
+                                            <a href="index.html"> <i class="fa fa-dashboard icon"> <b class="bg-danger"></b> </i> <span class="pull-right"> <i class="fa fa-angle-down text"></i> <i class="fa fa-angle-up text-active"></i> </span> <span>Workset</span> </a>
+                                            <ul class="nav lt">
+                                                <li>
+                                                    <a href="index.html"> <i class="fa fa-angle-right"></i> <span>Dashboard v1</span> </a>
+                                                </li>
+                                                <li>
+                                                    <a href="dashboard.html"> <i class="fa fa-angle-right"></i> <span>Dashboard v2</span> </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="active">
+                                            <a href="#layout" class="active"> <i class="fa fa-columns icon"> <b class="bg-warning"></b> </i> <span class="pull-right"> <i class="fa fa-angle-down text"></i> <i class="fa fa-angle-up text-active"></i> </span> <span>Layouts</span> </a>
+                                            <ul class="nav lt">
+                                                <li>
+                                                    <a href="layout-c.html"> <i class="fa fa-angle-right"></i> <span>Color option</span> </a>
+                                                </li>
+                                                <li>
+                                                    <a href="layout-r.html"> <i class="fa fa-angle-right"></i> <span>Right nav</span> </a>
+                                                </li>
+                                                <li>
+                                                    <a href="layout-h.html"> <i class="fa fa-angle-right"></i> <span>Hbox Layout</span> </a>
+                                                </li>
+                                                <li>
+                                                    <a href="layout-boxed.html"> <i class="fa fa-angle-right"></i> <span>Boxed Layout</span> </a>
+                                                </li>
+                                                <li class="active">
+                                                    <a href="layout-fluid.html" class="active"> <i class="fa fa-angle-right"></i> <span>Fluid Layout</span> </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="#uikit"> <i class="fa fa-flask icon"> <b class="bg-success"></b> </i> <span class="pull-right"> <i class="fa fa-angle-down text"></i> <i class="fa fa-angle-up text-active"></i> </span> <span>UI kit</span> </a>
+                                            <ul class="nav lt">
+                                                <li>
+                                                    <a href="buttons.html"> <i class="fa fa-angle-right"></i> <span>Buttons</span> </a>
+                                                </li>
+                                                <li>
+                                                    <a href="icons.html"> <b class="badge bg-info pull-right">369</b> <i class="fa fa-angle-right"></i> <span>Icons</span> </a>
+                                                </li>
+                                                <li>
+                                                    <a href="grid.html"> <i class="fa fa-angle-right"></i> <span>Grid</span> </a>
+                                                </li>
+                                                <li>
+                                                    <a href="widgets.html"> <b class="badge pull-right">8</b> <i class="fa fa-angle-right"></i> <span>Widgets</span> </a>
+                                                </li>
+                                                <li>
+                                                    <a href="components.html"> <i class="fa fa-angle-right"></i> <span>Components</span> </a>
+                                                </li>
+                                                <li>
+                                                    <a href="list.html"> <i class="fa fa-angle-right"></i> <span>List group</span> </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#table"> <i class="fa fa-angle-down text"></i> <i class="fa fa-angle-up text-active"></i> <span>Table</span> </a>
+                                                    <ul class="nav bg">
+                                                        <li>
+                                                            <a href="table-static.html"> <i class="fa fa-angle-right"></i> <span>Table static</span> </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="table-datatable.html"> <i class="fa fa-angle-right"></i> <span>Datatable</span> </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="table-datagrid.html"> <i class="fa fa-angle-right"></i> <span>Datagrid</span> </a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li>
+                                                    <a href="#form"> <i class="fa fa-angle-down text"></i> <i class="fa fa-angle-up text-active"></i> <span>Form</span> </a>
+                                                    <ul class="nav bg">
+                                                        <li>
+                                                            <a href="form-elements.html"> <i class="fa fa-angle-right"></i> <span>Form elements</span> </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="form-validation.html"> <i class="fa fa-angle-right"></i> <span>Form validation</span> </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="form-wizard.html"> <i class="fa fa-angle-right"></i> <span>Form wizard</span> </a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li>
+                                                    <a href="chart.html"> <i class="fa fa-angle-right"></i> <span>Chart</span> </a>
+                                                </li>
+                                                <li>
+                                                    <a href="fullcalendar.html"> <i class="fa fa-angle-right"></i> <span>Fullcalendar</span> </a>
+                                                </li>
+                                                <li>
+                                                    <a href="portlet.html"> <i class="fa fa-angle-right"></i> <span>Portlet</span> </a>
+                                                </li>
+                                                <li>
+                                                    <a href="timeline.html"> <i class="fa fa-angle-right"></i> <span>Timeline</span> </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="#pages"> <i class="fa fa-file-text icon"> <b class="bg-primary"></b> </i> <span class="pull-right"> <i class="fa fa-angle-down text"></i> <i class="fa fa-angle-up text-active"></i> </span> <span>Pages</span> </a>
+                                            <ul class="nav lt">
+                                                <li>
+                                                    <a href="gallery.html"> <i class="fa fa-angle-right"></i> <span>Gallery</span> </a>
+                                                </li>
+                                                <li>
+                                                    <a href="profile.html"> <i class="fa fa-angle-right"></i> <span>Profile</span> </a>
+                                                </li>
+                                                <li>
+                                                    <a href="invoice.html"> <i class="fa fa-angle-right"></i> <span>Invoice</span> </a>
+                                                </li>
+                                                <li>
+                                                    <a href="intro.html"> <i class="fa fa-angle-right"></i> <span>Intro</span> </a>
+                                                </li>
+                                                <li>
+                                                    <a href="master.html"> <i class="fa fa-angle-right"></i> <span>Master</span> </a>
+                                                </li>
+                                                <li>
+                                                    <a href="gmap.html"> <i class="fa fa-angle-right"></i> <span>Google Map</span> </a>
+                                                </li>
+                                                <li>
+                                                    <a href="jvectormap.html"> <i class="fa fa-angle-right"></i> <span>Vector Map</span> </a>
+                                                </li>
+                                                <li>
+                                                    <a href="signin.html"> <i class="fa fa-angle-right"></i> <span>Signin</span> </a>
+                                                </li>
+                                                <li>
+                                                    <a href="signup.html"> <i class="fa fa-angle-right"></i> <span>Signup</span> </a>
+                                                </li>
+                                                <li>
+                                                    <a href="404.html"> <i class="fa fa-angle-right"></i> <span>404</span> </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="mail.html"> <b class="badge bg-danger pull-right">3</b> <i class="fa fa-envelope-o icon"> <b class="bg-primary dker"></b> </i> <span>Message</span> </a>
+                                        </li>
+                                        <li>
+                                            <a href="notebook.html"> <i class="fa fa-pencil icon"> <b class="bg-info"></b> </i> <span>Notes</span> </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                                <!-- / nav -->
+                            </div>
+                        </section>
+                        <footer class="footer lt hidden-xs b-t b-black">
+                            <div id="chat" class="dropup">
+                                <section class="dropdown-menu on aside-md m-l-n">
+                                    <section class="panel bg-white">
+                                        <header class="panel-heading b-b b-light">Active chats</header>
+                                        <div class="panel-body animated fadeInRight">
+                                            <p class="text-sm">No active chats.</p>
+                                            <p><a href="#" class="btn btn-sm btn-default">Start a chat</a></p>
+                                        </div>
+                                    </section>
+                                </section>
+                            </div>
+                            <div id="invite" class="dropup">
+                                <section class="dropdown-menu on aside-md m-l-n">
+                                    <section class="panel bg-white">
+                                        <header class="panel-heading b-b b-light"> John <i class="fa fa-circle text-success"></i> </header>
+                                        <div class="panel-body animated fadeInRight">
+                                            <p class="text-sm">No contacts in your lists.</p>
+                                            <p><a href="#" class="btn btn-sm btn-facebook"><i class="fa fa-fw fa-facebook"></i> Invite from Facebook</a></p>
+                                        </div>
+                                    </section>
+                                </section>
+                            </div>
+                            <a href="#nav" data-toggle="class:nav-xs" class="pull-right btn btn-sm btn-black btn-icon"> <i class="fa fa-angle-left text"></i> <i class="fa fa-angle-right text-active"></i> </a>
+                            <div class="btn-group hidden-nav-xs">
+                                <button type="button" title="Chats" class="btn btn-icon btn-sm btn-black" data-toggle="dropdown" data-target="#chat"><i class="fa fa-comment-o"></i></button>
+                                <button type="button" title="Contacts" class="btn btn-icon btn-sm btn-black" data-toggle="dropdown" data-target="#invite"><i class="fa fa-facebook"></i></button>
+                            </div>
+                        </footer>
+                    </section>
+                </aside>
+                <!-- /.aside -->
+                <section id="content">
+                    <section class="wrapper">
+                        <div class="m-b"> <span class="h3 font-thin"><i class="i i-arrow-left3"></i> Fluid Layout</span> </div>
+                        <section class="panel panel-default">
+                            <header class="panel-heading"> GDP per capita average annual growth rate </header>
+                            <div class="table-responsive" id="growthrate"> </div>
+                        </section>
+                    </section>
+                    <a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen, open" data-target="#nav,html"></a>
+                </section>
+                <aside class="bg-light lter b-l aside-md hide" id="notes">
+                    <div class="wrapper">Notification</div>
+                </aside>
+            </section>
+        </section>
+    </section>
+    <!-- Bootstrap -->
+    <!-- App -->
+    <script src="js/app.v1.js"></script>
+    <script src="js/datatables/jquery.dataTables.min.js"></script>
+    <script src="js/datatables/jquery.csv-0.71.min.js"></script>
+    <script src="js/datatables/demo.js"></script>
+    <script src="js/app.plugin.js"></script>
 </body>
+
 </html>
